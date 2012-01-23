@@ -86,9 +86,7 @@ public class ManagementOnlyModeTestCase extends AbstractMgmtTestBase {
         try {
             ModelNode result = executeOperation(op);
         } catch (Exception e) {}
-        
-        Thread.sleep(20000);
-        
+                
         // check that the server is admin-only mode
         ModelControllerClient cl = ModelControllerClient.Factory.create(InetAddress.getByName(url.getHost()), MGMT_PORT, getCallbackHandler());
         op = createOpNode(null, READ_ATTRIBUTE_OPERATION);        
