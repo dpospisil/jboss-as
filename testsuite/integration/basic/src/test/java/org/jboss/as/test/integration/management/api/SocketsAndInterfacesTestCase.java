@@ -92,14 +92,9 @@ public class SocketsAndInterfacesTestCase extends AbstractMgmtTestBase {
         ModelNode op = createOpNode("interface=test-interface", ADD);    
         op.get("nic").set(testNic.getName());        
         ModelNode result = executeOperation(op);        
-
-        // add socket binding group
-        op = createOpNode("socket-binding-group=test-sockets", ADD);            
-        op.get("default-interface").set("test-interface");               
-        result = executeOperation(op);        
         
         // add socket binding using created interface
-        op = createOpNode("socket-binding-group=test-sockets/socket-binding=test-binding", ADD);            
+        op = createOpNode("socket-binding-group=standard-sockets/socket-binding=test-binding", ADD);            
         op.get("interface").set("test-interface");        
         op.get("port").set(TEST_PORT);        
         result = executeOperation(op);
@@ -136,13 +131,9 @@ public class SocketsAndInterfacesTestCase extends AbstractMgmtTestBase {
                 "http", testHost, TEST_PORT, "/").toString()));
         
         // remove socket binding
-        op = createOpNode("socket-binding-group=test-sockets/socket-binding=test-binding", REMOVE);            
+        op = createOpNode("socket-binding-group=standard-sockets/socket-binding=test-binding", REMOVE);            
         result = executeOperation(op);
 
-        // remove socket binding group
-        op = createOpNode("socket-binding-group=test-sockets", REMOVE);            
-        result = executeOperation(op);
-        
         // remove interface
         op = createOpNode("interface=test-interface", REMOVE);    
         result = executeOperation(op);        
