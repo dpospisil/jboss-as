@@ -115,6 +115,13 @@ public class DataSourceTestCase extends AbstractCliTestBase {
 
     private void testRemoveDataSource() throws Exception {
         
+        // disable data source
+        cli.sendLine("data-source disable --name=TestDS");
+
+        // check that it is not available through JNDI        
+        String jndiClass = JndiServlet.lookup(url.toString(), "java:jboss/datasources/TestDS");
+        Assert.assertEquals(JndiServlet.NOT_FOUND, jndiClass);        
+        
         // remove data source
         cli.sendLine("data-source remove --name=TestDS");
 
@@ -124,9 +131,6 @@ public class DataSourceTestCase extends AbstractCliTestBase {
         String ls = cli.readAllUnformated(WAIT_TIMEOUT, WAIT_LINETIMEOUT);
         assertFalse(ls.contains("java:jboss/datasources/TestDS"));        
         
-        // check that it is not available through JNDI        
-        String jndiClass = JndiServlet.lookup(url.toString(), "java:jboss/datasources/TestDS");
-        Assert.assertEquals(JndiServlet.NOT_FOUND, jndiClass);        
 
     }
 
