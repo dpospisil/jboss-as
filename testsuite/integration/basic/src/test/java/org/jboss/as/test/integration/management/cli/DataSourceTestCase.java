@@ -36,7 +36,6 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.as.test.integration.common.JndiServlet;
 import org.jboss.as.test.integration.management.util.CLIOpResult;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -56,6 +55,7 @@ import org.junit.runner.RunWith;
 public class DataSourceTestCase extends AbstractCliTestBase {
 
     @ArquillianResource URL url;
+    @ArquillianResource InitialContext ctx;
     
     private static final String[][] DS_PROPS = new String[][] {
         {"idle-timeout-minutes", "5"}
@@ -64,8 +64,7 @@ public class DataSourceTestCase extends AbstractCliTestBase {
     @Deployment
     public static Archive<?> getDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class, "DataSourceTestCase.war");
-        war.addClass(DataSourceTestCase.class);
-        war.addClass(JndiServlet.class);
+        war.addClass(DataSourceTestCase.class);        
         return war;
     }
 
@@ -108,8 +107,7 @@ public class DataSourceTestCase extends AbstractCliTestBase {
         cli.sendLine("data-source enable --name=TestDS");                
 
         // check that it is available through JNDI        
-        String jndiClass = JndiServlet.lookup(url.toString(), "java:jboss/datasources/TestDS");
-        Assert.assertEquals("org.jboss.jca.adapters.jdbc.WrapperDataSource", jndiClass);
+        Object obj = ctx.lookup("java:jboss/datasources/TestDS");
 
     }
 
@@ -119,8 +117,7 @@ public class DataSourceTestCase extends AbstractCliTestBase {
         cli.sendLine("data-source disable --name=TestDS");
 
         // check that it is not available through JNDI        
-        String jndiClass = JndiServlet.lookup(url.toString(), "java:jboss/datasources/TestDS");
-        Assert.assertEquals(JndiServlet.NOT_FOUND, jndiClass);        
+        Object obj = ctx.lookup("java:jboss/datasources/TestDS");
         
         // remove data source
         cli.sendLine("data-source remove --name=TestDS");
@@ -169,8 +166,7 @@ public class DataSourceTestCase extends AbstractCliTestBase {
         cli.sendLine("xa-data-source enable --name=TestXADS");                
 
         // check that it is available through JNDI        
-        String jndiClass = JndiServlet.lookup(url.toString(), "java:jboss/datasources/TestXADS");
-        Assert.assertEquals("org.jboss.jca.adapters.jdbc.WrapperDataSource", jndiClass);
+        Object obj = ctx.lookup("java:jboss/datasources/TestXADS");
         
 
     }
