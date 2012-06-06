@@ -40,11 +40,14 @@ import org.junit.Test;
 
 /**
  * Master-slave domain connection stress test. Starts one master host and repeatedly start and stop multiple slave hosts.
+ * The test could be optionally executed manually on multiple physical hosts (via unreliable network) using
+ * jboss.test.ccstresscase.masterOnly and jboss.test.ccstresscase.slaveOnly properties.
+ *
  * 
  * @author <a href="dpospisi@redhat.com">Dominik Pospisil</a>
  */
 public class ControllerConnectStressTestCase {
-    
+        
     private static final int SLAVES_FROM = Integer.valueOf(System.getProperty("jboss.test.ccstresscase.slavesFrom", "1"));
     private static final int SLAVES_TO = Integer.valueOf(System.getProperty("jboss.test.ccstresscase.slavesTo", "3"));
     private static final int RECONNECT_COUNT = Integer.valueOf(System.getProperty("jboss.test.ccstresscase.reconnectCount", "20"));
@@ -55,8 +58,10 @@ public class ControllerConnectStressTestCase {
     private static String masterAddress = System.getProperty("jboss.test.host.master.address", "127.0.0.1");
     private static String slaveAddress = System.getProperty("jboss.test.host.slave.address", "127.0.0.1");       
     
-    private static boolean masterOnly =  System.getProperty("jboss.test.ccstresscase.masteronly") != null;
-    private static boolean slaveOnly =  System.getProperty("jboss.test.ccstresscase.slaveonly") != null;
+    // only master host will be started
+    private static boolean masterOnly =  System.getProperty("jboss.test.ccstresscase.masterOnly") != null;
+    // only slave hosts will be started
+    private static boolean slaveOnly =  System.getProperty("jboss.test.ccstresscase.slaveOnly") != null;
     
     private static int MGMT_PORT = 9999;
     private static int MGMT_HTTP_PORT = 9990;
