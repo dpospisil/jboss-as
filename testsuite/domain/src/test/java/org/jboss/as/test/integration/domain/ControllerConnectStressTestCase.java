@@ -102,7 +102,7 @@ public class ControllerConnectStressTestCase {
             futures[k] = pool.submit(new Callable<Object>() {
                 
                 public Object call() throws Exception {
-                    DomainLifecycleUtil slaveUtil = new DomainLifecycleUtil(getSlaveConfiguration(slave + 1));
+                    DomainLifecycleUtil slaveUtil = new DomainLifecycleUtil(getSlaveConfiguration(slave));
                     Random r = new Random(System.currentTimeMillis());
                     for (int c = 0; c < RECONNECT_COUNT; c++) {
                             log.info("Starting slave " + slave + ".");
