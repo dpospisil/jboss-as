@@ -131,11 +131,13 @@ public class DomainLifecycleUtil {
 
             // No point backing up the file in a test scenario, just write what we need.
             File usersFile = new File(domainPath + "/configuration/mgmt-users.properties");
-            FileOutputStream fos = new FileOutputStream(usersFile);
-            PrintWriter pw = new PrintWriter(fos);
-            pw.println("slave=" + new UsernamePasswordHashUtil().generateHashedHexURP("slave", "ManagementRealm", "slave_user_password".toCharArray()));
-            pw.close();
-            fos.close();
+            if (!usersFile.exists()) {
+                FileOutputStream fos = new FileOutputStream(usersFile);
+                PrintWriter pw = new PrintWriter(fos);
+                pw.println("slave=" + new UsernamePasswordHashUtil().generateHashedHexURP("slave", "ManagementRealm", "slave_user_password".toCharArray()));
+                pw.close();
+                fos.close();
+            }
 
             List<String> cmd = new ArrayList<String>();
             cmd.add(java);
@@ -267,6 +269,7 @@ public class DomainLifecycleUtil {
                 exec.shutdownNow();
                 executor = null;
             }
+            domainClient = null;
         }
     }
 
