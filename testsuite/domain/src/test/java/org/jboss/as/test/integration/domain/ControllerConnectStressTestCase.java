@@ -43,6 +43,21 @@ import org.junit.Test;
  * The test could be optionally executed manually on multiple physical hosts (via unreliable network) using
  * jboss.test.ccstresscase.masterOnly and jboss.test.ccstresscase.slaveOnly properties.
  *
+ * Example of an execution on 3 physical hosts and 10 (5+5) slaves
+ * 
+ * Master:
+ * mvn -Dtest=org.jboss.as.test.integration.domain.ControllerConnectStressTestCase -Djboss.test.host.master.address=192.168.1.99
+ *  -Djboss.test.ccstresscase.masterOnly -Djboss.test.ccstresscase.slavesFrom=1 -Djboss.test.ccstresscase.slavesTo=10 install
+ * 
+ * Slave1:
+ * mvn -Dtest=org.jboss.as.test.integration.domain.ControllerConnectStressTestCase -Djboss.test.host.master.address=192.168.1.99
+ *  -Djboss.test.host.slave.address=192.168.1.64 -Djboss.test.ccstresscase.slaveOnly -Djboss.test.ccstresscase.slavesFrom=1
+ *  -Djboss.test.ccstresscase.slavesTo=5 -Djboss.test.ccstresscase.reconnectCount=20 install
+ * 
+ * Slave2:
+ * mvn -Dtest=org.jboss.as.test.integration.domain.ControllerConnectStressTestCase -Djboss.test.host.master.address=192.168.1.99
+ *  -Djboss.test.host.slave.address=192.168.1.65 -Djboss.test.ccstresscase.slaveOnly -Djboss.test.ccstresscase.slavesFrom=6
+ *  -Djboss.test.ccstresscase.slavesTo=10 -Djboss.test.ccstresscase.reconnectCount=20 install
  * 
  * @author <a href="dpospisi@redhat.com">Dominik Pospisil</a>
  */
