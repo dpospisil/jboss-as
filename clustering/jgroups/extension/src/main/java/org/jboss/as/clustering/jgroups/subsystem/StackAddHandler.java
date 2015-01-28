@@ -23,6 +23,7 @@ package org.jboss.as.clustering.jgroups.subsystem;
 
 import org.jboss.as.clustering.dmr.ModelNodes;
 import org.jboss.as.clustering.jgroups.logging.JGroupsLogger;
+import org.jboss.as.clustering.jgroups.protocol.DPING;
 import org.jboss.as.clustering.naming.BinderServiceBuilder;
 import org.jboss.as.controller.AbstractAddStepHandler;
 import org.jboss.as.controller.OperationContext;
@@ -32,6 +33,7 @@ import org.jboss.as.controller.registry.Resource;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
 import org.jboss.msc.service.ServiceTarget;
+import org.jboss.as.clustering.jgroups.protocol.DPingConfigurationService;
 import org.wildfly.clustering.jgroups.spi.ChannelFactory;
 import org.wildfly.clustering.jgroups.spi.ProtocolConfiguration;
 import org.wildfly.clustering.jgroups.spi.service.ProtocolStackServiceName;
@@ -112,6 +114,10 @@ public class StackAddHandler extends AbstractAddStepHandler {
                         .setModule(ModelNodes.asModuleIdentifier(ProtocolResourceDefinition.MODULE.resolveModelAttribute(context, protocol)))
                         .setSocketBinding(ModelNodes.asString(ProtocolResourceDefinition.SOCKET_BINDING.resolveModelAttribute(context, protocol)));
                 addProtocolProperties(context, protocol, protocolBuilder).build(target).install();
+
+                if (protocolProperty.getName().equals(DPING.class.getName())) {
+                    DPingConfigurationService.install(target);
+                }
             }
         }
 
